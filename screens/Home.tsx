@@ -3,6 +3,7 @@ import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { TextInput } from 'react-native-gesture-handler';
 import { primary } from '../theme';
 import { fetchBreezeCardData } from '../libraries/BreezeCard';
 
@@ -79,75 +80,124 @@ export default function HomeScreen() {
                 <View
                     style={{
                         flex: 1,
-                        alignItems: 'center',
-                        marginTop: 20,
+                        justifyContent: 'flex-start',
+                        alignItems: 'stretch',
                     }}
                 >
                     {balance !== undefined && (
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                width: '100%',
-                            }}
-                        >
-                            <Text
+                        <>
+                            <View
                                 style={{
-                                    fontSize: 20,
-                                    fontFamily: 'Helvetica Neue Bold',
-                                    color: primary.text.primary,
-                                    marginRight: 10,
-                                    marginLeft: 15,
+                                    width: 'auto',
+                                    height: 40,
+                                    backgroundColor: primary.blue,
+                                    alignItems: 'stretch',
+                                    justifyContent: 'center',
                                 }}
                             >
-                                Balance:
-                            </Text>
-                            <Text
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'stretch',
+                                        justifyContent: 'flex-start',
+                                        backgroundColor: '#006e9d',
+                                        height: 30,
+                                        width: 'auto',
+                                        margin: 8,
+                                        borderRadius: 10,
+                                    }}
+                                >
+                                    <TextInput
+                                        keyboardType="default"
+                                        placeholder="Search for a station"
+                                        placeholderTextColor={primary.white}
+                                        autoFocus={false}
+                                        style={{
+                                            color: 'white',
+                                            width: 'auto',
+                                            marginLeft: 10,
+                                            fontSize: 16,
+                                            fontFamily: 'Helvetica Neue Medium',
+                                        }}
+                                        autoCorrect={false}
+                                        numberOfLines={1}
+                                        onChangeText={(value) => {
+                                            console.log(value);
+                                        }}
+                                        blurOnSubmit
+                                        enablesReturnKeyAutomatically
+                                        returnKeyType="search"
+                                    />
+                                </View>
+                            </View>
+                            <View
                                 style={{
-                                    fontSize: 20,
-                                    fontFamily: 'Helvetica Neue Bold',
-                                    color: primary.yellow,
+                                    flexDirection: 'row',
+                                    width: '100%',
+                                    marginTop: 20,
                                 }}
                             >
-                                {balance === null ? 'Unable to fetch' : balance}
-                            </Text>
-                            <TouchableOpacity
-                                style={{
-                                    marginLeft: 'auto',
-                                    marginRight: 15,
-                                }}
-                                onPress={async () => {
-                                    if (!loadingBreezeBalance) {
-                                        setLoadingBreezeBalance(true);
-                                        setBalance('Loading...');
-                                        const breezeCardNumber =
-                                            await AsyncStorage.getItem(
-                                                'breezeCardNumber'
-                                            );
-                                        if (
-                                            breezeCardNumber !== '' &&
-                                            breezeCardNumber !== undefined
-                                        ) {
-                                            setBalance(
-                                                await fetchBreezeCardData(
-                                                    breezeCardNumber
-                                                )
-                                            );
+                                <Text
+                                    style={{
+                                        fontSize: 20,
+                                        fontFamily: 'Helvetica Neue Bold',
+                                        color: primary.text.primary,
+                                        marginRight: 10,
+                                        marginLeft: 15,
+                                    }}
+                                >
+                                    Balance:
+                                </Text>
+                                <Text
+                                    style={{
+                                        fontSize: 20,
+                                        fontFamily: 'Helvetica Neue Bold',
+                                        color: primary.yellow,
+                                    }}
+                                >
+                                    {balance === null
+                                        ? 'Unable to fetch'
+                                        : balance}
+                                </Text>
+                                <TouchableOpacity
+                                    style={{
+                                        marginLeft: 'auto',
+                                        marginRight: 15,
+                                    }}
+                                    onPress={async () => {
+                                        if (!loadingBreezeBalance) {
+                                            setLoadingBreezeBalance(true);
+                                            setBalance('Loading...');
+                                            const breezeCardNumber =
+                                                await AsyncStorage.getItem(
+                                                    'breezeCardNumber'
+                                                );
+                                            if (
+                                                breezeCardNumber !== '' &&
+                                                breezeCardNumber !== undefined
+                                            ) {
+                                                setBalance(
+                                                    await fetchBreezeCardData(
+                                                        breezeCardNumber
+                                                    )
+                                                );
+                                            }
+                                            setLoadingBreezeBalance(false);
                                         }
-                                        setLoadingBreezeBalance(false);
-                                    }
-                                }}
-                            >
-                                <Ionicons
-                                    name="refresh-circle-outline"
-                                    size={24}
-                                    color={
-                                        loadingBreezeBalance === true
-                                            ? primary.text.secondary
-                                            : primary.blue
-                                    }
-                                />
-                            </TouchableOpacity>
-                        </View>
+                                    }}
+                                >
+                                    <Ionicons
+                                        name="refresh-circle-outline"
+                                        size={24}
+                                        color={
+                                            loadingBreezeBalance === true
+                                                ? primary.text.secondary
+                                                : primary.blue
+                                        }
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </>
                     )}
                     <View
                         style={{
