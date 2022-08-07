@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Platform,
     Text,
@@ -14,6 +14,12 @@ import { primary } from '../theme';
 export default function SettingsScreen() {
     const [cardNumber, setCardNumber] = useState('');
     const navigator = useNavigation();
+
+    useEffect(() => {
+        AsyncStorage.getItem('breezeCardNumber').then((savedNumber) => {
+            setCardNumber(savedNumber);
+        });
+    }, []);
 
     return (
         <KeyboardAwareScrollView
@@ -48,9 +54,10 @@ export default function SettingsScreen() {
                     <TextInput
                         placeholder="card number"
                         keyboardType="numeric"
+                        value={cardNumber}
                         style={{
                             flexGrow: 1,
-                            marginLeft: 20,
+                            marginLeft: 10,
                             fontSize: 16,
                             backgroundColor: primary.text.secondary,
                             borderRadius: 4,
