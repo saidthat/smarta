@@ -2,6 +2,7 @@
   "expo": {
     "name": "Smarta",
     "slug": "smarta",
+    "owner": "saidthat",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,16 +20,22 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.smarta.smarta"
+      "bundleIdentifier": "com.smartamarta.smarta"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.smartamarta.smarta"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3a91606c-518e-439a-bce2-123da8278cd7"
+      }
     }
   }
 }

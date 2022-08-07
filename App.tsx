@@ -1,21 +1,50 @@
-import React from 'react';
+/* eslint-disable react/style-prop-object */
+import React, { useCallback, useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
+import { hideAsync, preventAutoHideAsync } from 'expo-splash-screen';
+import * as Font from 'expo-font';
+import { NavigationContainer } from '@react-navigation/native';
+import MainNavigator from './navigation/MainNavigator';
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
+preventAutoHideAsync();
 
 export default function App() {
+    const [appIsReady, setAppIsReady] = useState(false);
+
+    useEffect(() => {
+        /**
+         * Prepare and load anything that needs to be loaded before the app is ready.
+         */
+        async function prepare() {
+            await Font.loadAsync({
+                'Helvetica Neue': require('./assets/fonts/HelveticaNeue/HelveticaNeue.ttf'),
+                'Helvetica Neue Bold': require('./assets/fonts/HelveticaNeue/HelveticaNeueBd.ttf'),
+                'Helvetica Neue Medium': require('./assets/fonts/HelveticaNeue/HelveticaNeueMed.ttf'),
+            });
+
+            setAppIsReady(true);
+        }
+
+        prepare();
+    }, []);
+
+    const onLayoutRootView = useCallback(async () => {
+        if (appIsReady) {
+            await hideAsync();
+        }
+    }, [appIsReady]);
+
+    if (!appIsReady) {
+        return null;
+    }
+
     return (
-        <View style={styles.container}>
-            <Text>Smarta is Marta</Text>
-            <StatusBar />
+        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+            <StatusBar style="light" />
+            <NavigationContainer>
+                <MainNavigator />
+            </NavigationContainer>
         </View>
     );
 }
